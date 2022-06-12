@@ -1,20 +1,15 @@
 from rest_framework import generics
 from Attendance.serializers.AttSerializer import AttendanceSerializer
+from rest_framework.response import Response
+from rest_framework import status
 
 class AddAttendance(generics.GenericAPIView):
     """Generic view to register a new user"""
 
     serializer_class = AttendanceSerializer
-
-    # def post(self, request, *args, **kwargs):
-    #     serializer = self.get_serializer(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     user = serializer.save()
-    #     group, created = Group.objects.get_or_create(name='Employee')
-    #     group.save()
-    #     user.groups.add(group)
-    #     login(request, user)
-    #     token, created = Token.objects.get_or_create(user=serializer.instance)
-    #     return Response(
-    #         {"token": token.key, "user_id": user.id}, status=status.HTTP_201_CREATED
-    #     )
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
