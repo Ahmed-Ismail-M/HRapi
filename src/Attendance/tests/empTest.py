@@ -16,5 +16,4 @@ class RegisterationTest(APITestCase):
             "username": "ahmed", "email": "ahmed@im-software.net", "password": "testpass", }
         response = self.client.post("/api/v1/register", data)
         # assert the registeration completed
-        print(response.content)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
