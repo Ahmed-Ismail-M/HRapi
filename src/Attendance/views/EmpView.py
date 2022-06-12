@@ -1,5 +1,5 @@
 from rest_framework import generics
-from Attendance.serializers.EmpSerializer import EmployeeSerializer
+from Attendance.serializers.EmpSerializer import EmployeeRegisterSerializer
 from django.contrib.auth.models import Group
 from django.contrib.auth import login
 from rest_framework.authtoken.models import Token
@@ -10,7 +10,7 @@ from rest_framework.response import Response
 class RegisterAPI(generics.GenericAPIView):
     """Generic view to register a new user"""
 
-    serializer_class = EmployeeSerializer
+    serializer_class = EmployeeRegisterSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
