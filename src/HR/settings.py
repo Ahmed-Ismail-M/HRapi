@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'Attendance.apps.AttendanceConfig',
 ]
 ROOT_URLCONF = 'HR.urls'
 MIDDLEWARE = [
