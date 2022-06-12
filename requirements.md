@@ -13,16 +13,6 @@ Column | Type
 --- | --- |
 id | SERIAL       PRIMARY KEY
 name | VARCHAR(100) UNIQUE NOT NULL
-price | REAL         NOT NULL
-category | VARCHAR(50)
-
-#### Users
-Column | Type
---- | --- |
-id | SERIAL  PRIMARY KEY
-firstName |  VARCHAR(50) UNIQUE NOT NULL
-lastName | VARCHAR(50)
-password | VARCHAR     NOT NULL
 
 #### Attendance
 Column | Type
