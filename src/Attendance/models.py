@@ -14,9 +14,11 @@ class Employee(User):
 
 
 class Attendance(models.Model):
+    class Check(models.TextChoices):
+        CHECKIN = 'in'
+        CHECKOUT = 'out'
     emp = models.ForeignKey(
         Employee, on_delete=models.CASCADE,  related_name='employee')
-    check_in = models.TimeField()
-    check_out = models.TimeField()
+    check = models.CharField(max_length=3, choices=Check.choices)
     date = models.DateField(default=date.today)
 
