@@ -11,5 +11,5 @@ class Attendance(models.Model):
     emp = models.ForeignKey(Employee, on_delete=models.CASCADE,  related_name='employee')
     check_in = models.TimeField()
     check_out = models.TimeField()
-    date = models.DateField
+    date = models.DateField()
 # Create your models here.
