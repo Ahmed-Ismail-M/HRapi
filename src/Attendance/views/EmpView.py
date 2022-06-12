@@ -5,6 +5,8 @@ from django.contrib.auth import login
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.response import Response
+
+
 class RegisterAPI(generics.GenericAPIView):
     """Generic view to register a new user"""
 
