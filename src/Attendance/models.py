@@ -19,3 +19,4 @@ class Attendance(models.Model):
     check_in = models.TimeField()
     check_out = models.TimeField()
     date = models.DateField(default=date.today)
+
