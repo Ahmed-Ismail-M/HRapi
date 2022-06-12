@@ -19,6 +19,6 @@ Column | Type
 --- | --- |
 id | SERIAL  PRIMARY KEY
 emp_id |  BIGINT      NOT NULL  REFERENCES employees(id) ON DELETE CASCADE
-check_in  |  VARCHAR(20)
-check_out  |  VARCHAR(20)
-day | date
+check_in  |  TIMESTAMP
+check_out  |  TIMESTAMP
+day | DATE
