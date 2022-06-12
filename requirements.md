@@ -7,15 +7,8 @@
 - Create [auth required] post'/att'
 - Index [auth required, perm required] get'/atts'
 
-#### Orders
-- Index get'/orders'
-- Show get'/orders/:id'
-- Create [token required] post'/orders'
-- Delete [token required] delete'/orders'
-- Update [token required] put'/orders/:id'
-
 ## Data Shapes
-#### Products
+#### Employees
 Column | Type
 --- | --- |
 id | SERIAL       PRIMARY KEY
@@ -31,17 +24,11 @@ firstName |  VARCHAR(50) UNIQUE NOT NULL
 lastName | VARCHAR(50)
 password | VARCHAR     NOT NULL
 
-#### Orders
+#### Attendance
 Column | Type
 --- | --- |
 id | SERIAL  PRIMARY KEY
-user_id |  BIGINT      NOT NULL  REFERENCES users(id) ON DELETE CASCADE
-status  |  VARCHAR(20)
-
-#### OrdersProduct
-Column | Type
---- | --- |
-id | SERIAL  PRIMARY KEY
-quantity | integer     NOT NULL
-product_id |  bigint      NOT NULL REFERENCES products(id)       ON DELETE CASCADE
-order_id |  bigint      NOT NULL REFERENCES orders(id)         ON DELETE CASCADE
+emp_id |  BIGINT      NOT NULL  REFERENCES employees(id) ON DELETE CASCADE
+check_in  |  VARCHAR(20)
+check_out  |  VARCHAR(20)
+day | date
