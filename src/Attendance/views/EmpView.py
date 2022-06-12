@@ -14,7 +14,7 @@ class RegisterAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        group, created = Group.objects.get_or_create(name=kwargs.pop("group_name"))
+        group, created = Group.objects.get_or_create(name='Employee')
         group.save()
         user.groups.add(group)
         login(request, user)

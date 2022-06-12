@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'Attendance.apps.AttendanceConfig',
+    'rest_framework.authtoken'
 ]
 ROOT_URLCONF = 'HR.urls'
 MIDDLEWARE = [
