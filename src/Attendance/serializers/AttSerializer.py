@@ -6,8 +6,6 @@ class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = ['check_in', 'check_out', 'date']
-        # extra_kwargs = {"check_in": {"required": True}, "check_out": {
-        #     "required": True}, "date": {"required": True}}
 
     def validate(self, data):
         check_in = data.get('check_in', None)
@@ -36,7 +34,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError(
                         "CHECK IN MUST OCCUR AFTER LAST CHECK IN")
         if check_out:
-            if not last_check_in :
+            if not last_check_in:
                 raise serializers.ValidationError(
                     "CHECK IN MUST OCCUR BEFORE CHECK OUT")
             if last_check_in:
