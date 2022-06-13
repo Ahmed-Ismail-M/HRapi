@@ -34,6 +34,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
                     if check_out <= att.check_in:
                         raise serializers.ValidationError(
                             "CHECK OUT MUST OCCUR AFTER LAST CHECK IN")
+                
         return data
 
     def create(self, validated_data):
