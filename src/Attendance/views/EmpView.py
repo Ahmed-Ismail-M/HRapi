@@ -25,14 +25,14 @@ class RegisterAPI(generics.GenericAPIView):
 class LoginAPI(generics.GenericAPIView):
     serializer_class = EmployeeLoginSerializer
     def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(
+        serializer_class = self.serializer_class(
             data=request.data, context={"request": request}
         )
 
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data["user"]
+        serializer_class.is_valid(raise_exception=True)
+        user = serializer_class.validated_data["user"]
         login(request, user)
-        token, created = Token.objects.get_or_create(user=serializer.instance)
+        token, created = Token.objects.get_or_create(user=serializer_class.instance)
         return Response(
             {"token": token.key, "user_id": user.id}, status=status.HTTP_200_OK
         )
