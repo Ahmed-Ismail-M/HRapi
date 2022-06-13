@@ -10,6 +10,8 @@ class RegisterationTest(APITestCase):
             username="admin", email="admin@im-software.net", password="testpass")
         self.client = Client()
         self.client.login(username='admin', password='testpass')
+    def tearDown(self):
+        self.admin.delete()
 
     def test_employee(self):
         data = {

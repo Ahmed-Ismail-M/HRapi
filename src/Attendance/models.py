@@ -20,5 +20,5 @@ class Attendance(models.Model):
     emp = models.ForeignKey(
         Employee, on_delete=models.CASCADE,  related_name='employee')
     check = models.CharField(max_length=3, choices=Check.choices)
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(default=date.today)
 
