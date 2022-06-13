@@ -2,11 +2,11 @@ from Attendance.models import Employee
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group
-from django.contrib.auth.hashers import make_password
 
 
 class EmployeeRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={'input_type': 'password'})
+
     class Meta:
         model = Employee
         fields = ['username', 'password', 'first_name',
