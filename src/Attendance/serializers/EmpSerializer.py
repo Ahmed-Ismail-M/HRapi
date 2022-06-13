@@ -5,4 +5,9 @@ class EmployeeRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ['password', 'username', 'first_name', 'last_name','email']
+        
+class EmployeeLoginSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = ['password', 'username']
 
