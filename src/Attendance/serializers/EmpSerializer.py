@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group
 
 
 class EmployeeRegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(style={'input_type': 'password'})
     class Meta:
         model = Employee
         fields = ['password', 'username', 'first_name',
@@ -12,7 +13,8 @@ class EmployeeRegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {"email": {"required": True}}
 
     def create(self, validated_data):
-        user = Employee.objects.create(**validated_data)
+        user = super(EmployeeRegisterSerializer, self).create(validated_data)
+        user.set_password(validated_data['password'])
         group, created = Group.objects.get_or_create(name='Employee')
         group.save()
         user.groups.add(group)
