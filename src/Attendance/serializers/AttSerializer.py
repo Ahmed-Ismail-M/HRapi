@@ -14,7 +14,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
         attendaces = Attendance.objects.all().filter(date=data['date'])
         for att in attendaces:
             if att.check_out >= data['check_in']:
-                raise serializers.ValidationError("last check out > check in")
+                raise serializers.ValidationError("CHECK IN MUST OCCUR AFTER LAST CHECK OUT")
         if data['check_out'] <= data['check_in']:
             raise serializers.ValidationError(
                 "CHECK OUT MUST OCCUR AFTER CHECK IN")
