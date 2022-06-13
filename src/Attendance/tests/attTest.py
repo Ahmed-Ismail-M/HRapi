@@ -20,19 +20,19 @@ class AddAtt(APITestCase):
     def tearDown(self):
         self.emp.delete()
 
-    def test1_att(self):
+    def test_att(self):
         data = {"check_in": "1:30", "date": "2022-1-1"}
         response = self.client.post("/api/v1/attendance", data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test2_invalid_check_out(self):
-        data = {"date": "2022-1-1", "check_out": "1:00"}
+    def test_valid_check_out(self):
+        data = {"check_in": "1:30", "date": "2022-1-1"}
+        self.client.post("/api/v1/attendance", data)
+        data = {"date": "2022-1-1", "check_out": "1:40"}
         response = self.client.post("/api/v1/attendance", data)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(
-            response.content, b'{"non_field_errors":["CHECK IN MUST OCCUR BEFORE CHECK OUT"]}')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def test3_invalid_check_out(self):
+    def test_invalid_check_out(self):
         data = {"date": "2022-1-1", "check_out": "1:00"}
         response = self.client.post("/api/v1/attendance", data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
