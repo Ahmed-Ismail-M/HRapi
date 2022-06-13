@@ -14,8 +14,7 @@ class AddAtt(APITestCase):
         self.emp.delete()
 
     def test_att(self):
-        data = {
-            "emp":self.emp.id, "check": "in", "date": "2022-1-1T6:30", }
+        data = {"check": "in", "date": "2022-1-1T6:30", }
         response = self.client.post("/api/v1/attendance", data)
         print(response.content)
         # assert the registeration completed
