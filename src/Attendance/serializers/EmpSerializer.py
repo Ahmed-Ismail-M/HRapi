@@ -1,10 +1,13 @@
 from Attendance.models import Employee
 from rest_framework import serializers
 from django.contrib.auth import authenticate
+
+
 class EmployeeRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ['password', 'username', 'first_name', 'last_name','email']
+        fields = ['password', 'username', 'first_name', 'last_name', 'email']
+
 
 class EmployeeLoginSerializer(serializers.Serializer):
     username = serializers.CharField(
@@ -13,13 +16,12 @@ class EmployeeLoginSerializer(serializers.Serializer):
     )
     password = serializers.CharField(
         label="Password",
-        # This will be used when the DRF browsable API is enabled
         style={'input_type': 'password'},
         trim_whitespace=False,
         write_only=True
     )
+
     def validate(self, attrs):
-        # Take username and password from request
         username = attrs.get('username')
         password = attrs.get('password')
 
