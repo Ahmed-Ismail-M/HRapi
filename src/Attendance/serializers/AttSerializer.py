@@ -15,6 +15,9 @@ class AttendanceSerializer(serializers.ModelSerializer):
         if check_in and check_out:
             raise serializers.ValidationError(
                         "Only one check per record")
+        if not check_in and not check_out:
+            raise serializers.ValidationError(
+                        "At least one check per record")
         attendaces = Attendance.objects.all().filter(date=data['date'])
         if check_in:
             for att in attendaces:
