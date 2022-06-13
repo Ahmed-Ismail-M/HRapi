@@ -9,11 +9,9 @@ class Employee(AbstractUser):
         verbose_name_plural = 'employees'
 
 class Attendance(models.Model):
-    class Check(models.TextChoices):
-        CHECKIN = 'in'
-        CHECKOUT = 'out'
     emp = models.ForeignKey(
         Employee, on_delete=models.CASCADE,  related_name='employee')
-    check = models.CharField(max_length=3, choices=Check.choices)
-    date = models.DateTimeField(default=date.today)
+    check_in = models.TimeField()
+    check_out = models.TimeField()
+    date = models.DateField(default=date.today)
 
