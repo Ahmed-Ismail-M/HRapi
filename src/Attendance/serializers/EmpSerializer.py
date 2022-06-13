@@ -14,11 +14,12 @@ class EmployeeRegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {"email": {"required": True}}
 
     def create(self, validated_data):
-        emp = self.Meta.model(**validated_data)
+        emp = self.Meta.model.objects.create(**validated_data)
         emp.set_password(validated_data['password'])
         group, created = Group.objects.get_or_create(name='Employee')
         group.save()
         emp.groups.add(group)
+        emp.save()
         return emp
 
 
