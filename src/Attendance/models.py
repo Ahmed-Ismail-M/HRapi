@@ -11,7 +11,7 @@ class Employee(AbstractUser):
 class Attendance(models.Model):
     emp = models.ForeignKey(
         Employee, on_delete=models.CASCADE,  related_name='employee')
-    check_in = models.TimeField()
-    check_out = models.TimeField()
+    check_in = models.TimeField(default=None, null=True)
+    check_out = models.TimeField(default=None, null=True)
     date = models.DateField(default=date.today)
 
