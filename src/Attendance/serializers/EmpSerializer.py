@@ -1,24 +1,25 @@
-from Attendance.models import Employee, User
+from Attendance.models import Employee
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group
+from django.contrib.auth.hashers import make_password
 
 
 class EmployeeRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(style={'input_type': 'password'})
     class Meta:
         model = Employee
-        fields = ['password', 'username', 'first_name',
+        fields = ['username', 'password', 'first_name',
                   'last_name', 'email', 'is_superuser']
         extra_kwargs = {"email": {"required": True}}
 
     def create(self, validated_data):
-        user = super(EmployeeRegisterSerializer, self).create(validated_data)
-        user.set_password(validated_data['password'])
+        emp = self.Meta.model(**validated_data)
+        emp.set_password(validated_data['password'])
         group, created = Group.objects.get_or_create(name='Employee')
         group.save()
-        user.groups.add(group)
-        return user
+        emp.groups.add(group)
+        return emp
 
 
 class EmployeeLoginSerializer(serializers.Serializer):
@@ -36,7 +37,6 @@ class EmployeeLoginSerializer(serializers.Serializer):
     def validate(self, attrs):
         username = attrs.get('username')
         password = attrs.get('password')
-        print(User.objects.get(username=username).is_superuser)
         if username and password:
             # Try to authenticate the user using Django auth framework.
             user = authenticate(request=self.context.get('request'),

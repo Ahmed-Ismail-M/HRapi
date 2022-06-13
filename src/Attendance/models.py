@@ -3,15 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from datetime import date
 
 
-class User(AbstractUser):
-    pass
-
-
-class Employee(User):
+class Employee(AbstractUser):
     class Meta:
         verbose_name = "employee"
         verbose_name_plural = 'employees'
-
 
 class Attendance(models.Model):
     class Check(models.TextChoices):
