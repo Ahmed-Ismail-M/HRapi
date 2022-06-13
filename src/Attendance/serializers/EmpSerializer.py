@@ -1,4 +1,4 @@
-from Attendance.models import Employee
+from Attendance.models import Employee, User
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 
@@ -6,7 +6,8 @@ from django.contrib.auth import authenticate
 class EmployeeRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ['password', 'username', 'first_name', 'last_name', 'email']
+        fields = ['password', 'username', 'first_name',
+                  'last_name', 'email', 'is_superuser']
 
 
 class EmployeeLoginSerializer(serializers.Serializer):
@@ -24,12 +25,13 @@ class EmployeeLoginSerializer(serializers.Serializer):
     def validate(self, attrs):
         username = attrs.get('username')
         password = attrs.get('password')
-
+        print(User.objects.get(username=username).is_superuser)
         if username and password:
             # Try to authenticate the user using Django auth framework.
             user = authenticate(request=self.context.get('request'),
                                 username=username, password=password)
             if not user:
+                print(user)
                 msg = 'Access denied: wrong username or password.'
                 raise serializers.ValidationError(msg, code='authorization')
         else:
