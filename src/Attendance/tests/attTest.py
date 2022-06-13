@@ -11,8 +11,8 @@ class AddAtt(APITestCase):
             username="admin", email="admin@im-software.net", password="testpass")
         group, created = Group.objects.get_or_create(name='Employee')
         group.save()
-        emp.groups.add(group)
-        emp.save()
+        self.emp.groups.add(group)
+        self.emp.save()
         self.client = Client()
         self.client.login(username='admin', password='testpass')
     def tearDown(self):
