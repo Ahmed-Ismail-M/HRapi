@@ -8,7 +8,8 @@ from django.contrib.auth.models import Group
 class AddAtt(APITestCase):
     def setUp(self) -> None:
         self.emp = Employee.objects.create(
-            username="admin", email="admin@im-software.net", password="testpass")
+            username="admin", email="admin@im-software.net")
+        self.emp.set_password('testpass')
         group, created = Group.objects.get_or_create(name='Employee')
         group.save()
         self.emp.groups.add(group)
