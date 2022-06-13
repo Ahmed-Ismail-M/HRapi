@@ -25,5 +25,5 @@ class Create(generics.GenericAPIView):
 class Index(generics.ListAPIView):
     serializer_class = AttendanceSerializer
     def get_queryset(self):
-        queryset = Attendance.objects.all().filter(emp=self.request.user)
+        queryset = Attendance.objects.all().filter(emp=self.request.user.id)
         return queryset
