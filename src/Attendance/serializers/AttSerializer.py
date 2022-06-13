@@ -1,6 +1,5 @@
 from Attendance.models import Attendance, Employee
 from rest_framework import serializers
-from datetime import datetime, date
 
 
 class AttendanceSerializer(serializers.ModelSerializer):
@@ -14,7 +13,8 @@ class AttendanceSerializer(serializers.ModelSerializer):
         attendaces = Attendance.objects.all().filter(date=data['date'])
         for att in attendaces:
             if att.check_out >= data['check_in']:
-                raise serializers.ValidationError("CHECK IN MUST OCCUR AFTER LAST CHECK OUT")
+                raise serializers.ValidationError(
+                    "CHECK IN MUST OCCUR AFTER LAST CHECK OUT")
         if data['check_out'] <= data['check_in']:
             raise serializers.ValidationError(
                 "CHECK OUT MUST OCCUR AFTER CHECK IN")
