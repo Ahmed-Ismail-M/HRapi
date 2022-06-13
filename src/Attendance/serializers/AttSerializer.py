@@ -10,8 +10,8 @@ class AttendanceSerializer(serializers.ModelSerializer):
         #     "required": True}, "date": {"required": True}}
 
     def validate(self, data):
-        check_in = data.pop('check_in', None)
-        check_out = data.pop('check_out', None)
+        check_in = data.get('check_in', None)
+        check_out = data.get('check_out', None)
         if check_in and check_out:
             raise serializers.ValidationError(
                         "Only one check per record")
@@ -21,14 +21,21 @@ class AttendanceSerializer(serializers.ModelSerializer):
         attendaces = Attendance.objects.all().filter(date=data['date'])
         if check_in:
             for att in attendaces:
-                if att.check_out >= data['check_in']:
-                    raise serializers.ValidationError(
-                        "CHECK IN MUST OCCUR AFTER LAST CHECK OUT")
+                if att.check_out:
+                    if att.check_out >= check_in:
+                        raise serializers.ValidationError(
+                            "CHECK IN MUST OCCUR AFTER LAST CHECK OUT")
         if check_out:
-            for att in attendaces:
-                if check_out <= att.check_out:
-                    raise serializers.ValidationError(
-                        "CHECK OUT MUST OCCUR AFTER CHECK IN")
+            if attendaces:
+                for att in attendaces:
+                    if att.check_in:
+                        if check_out <= att.check_in:
+                            raise serializers.ValidationError(
+                                "CHECK OUT MUST OCCUR AFTER LAST CHECK IN")
+            else:
+                raise serializers.ValidationError(
+                        "CHECK IN MUST OCCUR BEFORE CHECK OUT")
+            
         return data
 
     def create(self, validated_data):
