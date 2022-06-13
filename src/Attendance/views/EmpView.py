@@ -2,6 +2,7 @@ from rest_framework import generics
 from Attendance.serializers.EmpSerializer import EmployeeRegisterSerializer, EmployeeLoginSerializer
 from django.contrib.auth.models import Group
 from django.contrib.auth import login
+from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -13,12 +14,10 @@ class RegisterAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        group, created = Group.objects.get_or_create(name='Employee')
-        group.save()
-        user.groups.add(group)
         login(request, user)
+        token, created = Token.objects.get_or_create(user=serializer.instance)
         return Response(
-            {"user_id": user.id}, status=status.HTTP_201_CREATED
+            {"token": token.key, "user_id": user.id}, status=status.HTTP_201_CREATED
         )
 class LoginAPI(generics.GenericAPIView):
     serializer_class = EmployeeLoginSerializer
@@ -30,6 +29,7 @@ class LoginAPI(generics.GenericAPIView):
         serializer_class.is_valid(raise_exception=True)
         user = serializer_class.validated_data["user"]
         login(request, user)
+        token, created = Token.objects.get_or_create(user=serializer_class.instance)
         return Response(
-            {"user_id": user.id}, status=status.HTTP_200_OK
+            {"token": token.key, "user_id": user.id}, status=status.HTTP_200_OK
         )

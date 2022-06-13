@@ -1,6 +1,7 @@
 from Attendance.models import Employee, User
 from rest_framework import serializers
 from django.contrib.auth import authenticate
+from django.contrib.auth.models import Group
 
 
 class EmployeeRegisterSerializer(serializers.ModelSerializer):
@@ -8,6 +9,14 @@ class EmployeeRegisterSerializer(serializers.ModelSerializer):
         model = Employee
         fields = ['password', 'username', 'first_name',
                   'last_name', 'email', 'is_superuser']
+        extra_kwargs = {"email": {"required": True}}
+
+    def create(self, validated_data):
+        user = Employee.objects.create(**validated_data)
+        group, created = Group.objects.get_or_create(name='Employee')
+        group.save()
+        user.groups.add(group)
+        return user
 
 
 class EmployeeLoginSerializer(serializers.Serializer):
