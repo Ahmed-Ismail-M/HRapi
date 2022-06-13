@@ -6,7 +6,7 @@ from datetime import datetime, date
 class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
-        fields = ['check_in', 'check_out' 'date']
+        fields = ['check_in', 'check_out', 'date']
         extra_kwargs = {"check_in": {"required": True}, "check_out": {
             "required": True}, "date": {"required": True}}
 
