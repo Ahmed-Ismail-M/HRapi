@@ -16,12 +16,11 @@ class AddAtt(APITestCase):
         self.emp.save()
         self.client = Client()
         self.client.login(username='admin', password='testpass')
+
     def tearDown(self):
         self.emp.delete()
 
     def test_att(self):
         data = {"check": "in", "date": "2022-1-1T6:30", }
         response = self.client.post("/api/v1/attendance", data)
-        print(response.content)
-        # assert the registeration completed
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
