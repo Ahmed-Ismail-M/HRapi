@@ -6,6 +6,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = ['check_in', 'check_out', 'date']
+        extra_kwargs = {'date': {'required': True}} 
 
     def validate(self, data):
         check_in = data.get('check_in', None)
