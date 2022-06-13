@@ -1,4 +1,5 @@
 from rest_framework import generics
+from Attendance.models import Attendance
 from Attendance.serializers.AttSerializer import AttendanceSerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -19,3 +20,10 @@ class AddAttendance(generics.GenericAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Index(generics.ListAPIView):
+    serializer_class = AttendanceSerializer
+    def get_queryset(self):
+        queryset = Attendance.objects.all().filter(emp=self.request.user)
+        return queryset
