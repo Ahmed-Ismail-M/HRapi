@@ -2,12 +2,17 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from django.test.client import Client
 from Attendance.models import Employee
+from django.contrib.auth.models import Group
 
 
 class AddAtt(APITestCase):
     def setUp(self) -> None:
         self.emp = Employee.objects.create(
             username="admin", email="admin@im-software.net", password="testpass")
+        group, created = Group.objects.get_or_create(name='Employee')
+        group.save()
+        emp.groups.add(group)
+        emp.save()
         self.client = Client()
         self.client.login(username='admin', password='testpass')
     def tearDown(self):
