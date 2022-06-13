@@ -11,10 +11,9 @@ class AttendanceSerializer(serializers.ModelSerializer):
             "required": True}, "date": {"required": True}}
 
     def validate(self, data):
-        today_att = Attendance.objects.get(date=date.today())
-        if today_att:  # check if there is a previous record
-            # check if the new time is valid
-            if today_att.check_in > data['check_in'] or today_att.check_out < data['check_out']:
+        today_attendaces = Attendance.objects.all().filter(date=date.today())
+        for att in today_attendaces:
+            if att.check_in > data['check_in'] or today_att.check_out < data['check_out']:
                 raise serializers.ValidationError("Invalid time")
         if data['check_out'] <= data['check_in']:
             raise serializers.ValidationError(
