@@ -40,5 +40,6 @@ class AddAtt(APITestCase):
                          b'{"check_out":["This field is required."]}')
 
     def test_get_att(self):
+        self.client.login(username='admin', password='testpass')
         response = self.client.get("/api/v1/attendances")
         print(response.content)

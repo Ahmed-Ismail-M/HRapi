@@ -7,7 +7,7 @@ from django.utils.decorators import method_decorator
 from Attendance.middleware import auth_required, allowed_users
 
 
-class AddAttendance(generics.GenericAPIView):
+class Create(generics.GenericAPIView):
 
     serializer_class = AttendanceSerializer
 
