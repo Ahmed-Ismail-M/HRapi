@@ -21,9 +21,8 @@ class AddAtt(APITestCase):
         self.emp.delete()
 
     def test_att(self):
-        data = {"check_in": "1:30", "date": "2022-1-1", "check_out": "1:00"}
+        data = {"check_in": "1:30", "date": "2022-1-1", "check_out": "2:30"}
         response = self.client.post("/api/v1/attendance", data)
-        print(response.content)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_invalid_check_out(self):
