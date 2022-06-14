@@ -18,23 +18,27 @@ class Attendance(models.Model):
     check_in = models.TimeField(default=None, null=True)
     check_out = models.TimeField(default=None, null=True)
     date = models.DateField(default=date.today)
-    is_attending = models.BooleanField()
-    
+    is_attending = models.BooleanField(default=False)
+
     @classmethod
     def check_late(cls, check_in: time) -> bool:
-        if check_in > cls.WORKING_HRS["in"]:
-            return True
+        if check_in:
+            if check_in > cls.WORKING_HRS["in"]:
+                return True
         return False
 
     @classmethod
     def check_early_leave(cls, check_out: time) -> bool:
-        if check_out < cls.WORKING_HRS["out"]:
-            return True
+        if check_out:
+            if check_out < cls.WORKING_HRS["out"]:
+                return True
         return False
 
     @classmethod
     def calculate_wroking_time(cls, check_in: time, check_out: time) -> dict:
-        td = timedelta(hours=check_out.hour, minutes=check_out.minute, seconds=check_out.second) - timedelta(
-            hours=check_in.hour, minutes=check_in.minute, seconds=check_in.second)
-        return {'days': td.days, 'hrs': td.seconds // 3600, 'mins': (td.seconds //60)% 60}
+        if check_in and check_out:
+            td = timedelta(hours=check_out.hour, minutes=check_out.minute, seconds=check_out.second) - timedelta(
+                hours=check_in.hour, minutes=check_in.minute, seconds=check_in.second)
+            return {'days': td.days, 'hrs': td.seconds // 3600, 'mins': (td.seconds //60)% 60}
+        return {}
 
