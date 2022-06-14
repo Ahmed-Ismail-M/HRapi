@@ -10,15 +10,25 @@ class AttendanceSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         # get current check in and out
+        user = self.context['request'].user
         check_in = attrs.get('check_in', None) 
         check_out = attrs.get('check_out', None)
+        date = attrs.get('date', None)
         try:
             # get last check in and out
             last_record = Attendance.objects.all().filter(
-                date=attrs['date']).last()
-
+                date=attrs['date'] ,emp=user).last()
+            # get last check in and out
+            last_check_in = (
+                Attendance.objects.all().filter(date=date ,emp=user).latest("check_in").check_in
+            )
+            last_check_out = (
+                Attendance.objects.all().filter(date=date ,emp=user).latest("check_out").check_out
+            )
         except Attendance.DoesNotExist:
             last_record = None
+            last_check_in = None
+            last_check_out = None
         if check_in and check_out:
             # check if user logged check in and out
             raise serializers.ValidationError(
@@ -33,17 +43,25 @@ class AttendanceSerializer(serializers.ModelSerializer):
                 if last_record.is_attending:
                     raise serializers.ValidationError(
                         "PLEASE CHECK OUT FIRST")
-                if last_record.check_in <= check_in:
-                    raise serializers.ValidationError(
-                            f"CHECK IN MUST OCCUR AFTER {last_record.check_in}")
+                else:
+                    if last_check_in:
+                        if last_check_in <= check_in:
+                            raise serializers.ValidationError(
+                                    f"CHECK IN MUST OCCUR AFTER {last_record.check_in}")
             if check_out:
                 # if user logged check out -> 
                 if not last_record.is_attending:
                     raise serializers.ValidationError(
                         "PLEASE CHECK IN FIRST")
-                if last_record.check_out <= check_out:
-                    raise serializers.ValidationError(
-                            f"CHECK OUT MUST OCCUR AFTER {last_record.check_out}")
+                else:
+                    if last_check_out:
+                        if last_check_out <= check_out:
+                            raise serializers.ValidationError(
+                                    f"CHECK OUT MUST OCCUR AFTER {last_check_out}")
+                    if last_check_in:
+                        if last_check_in >= check_out:
+                            raise serializers.ValidationError(
+                                    f"CHECK OUT MUST OCCUR AFTER {last_check_in}")
         else:
             if check_out:
                 raise serializers.ValidationError(
