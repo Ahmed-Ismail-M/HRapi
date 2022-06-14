@@ -7,7 +7,7 @@ from rest_framework import status
 from django.utils.decorators import method_decorator
 from Attendance.middleware import auth_required, allowed_users
 from rest_framework.decorators import api_view
-from Attendance.datastore.att_data_store import get_daily_report
+from Attendance.datastore.att_data_store import get_daily_report_by_user, get_daily_index_by_user
 
 def calc_working_hrs(check_in: datetime, check_out: datetime):
     return str(check_in - check_out)
@@ -39,24 +39,9 @@ class Index(generics.ListAPIView):
 
 @api_view()
 def DailyIndex(request):
-    daily_atts = Attendance.objects.all().filter(emp=request.user.id)
-    result = {}
-    for index, att in enumerate(daily_atts):
-        stri = str(index + 1)
-        str_date = att.date.strftime("%d/%m/%Y")
-        if str_date not in result:
-            if att.check_in:
-                result[str_date] = {f"{stri}-In": att.check_in}
-            if att.check_out:
-                result[str_date] = {f"{stri}-Out": att.check_out}
-        else:
-            if att.check_in:
-                result[str_date][f"{stri}-In"] = att.check_in
-            if att.check_out:
-                result[str_date][f"{stri}-Out"] = att.check_out
-    return Response(result)
+    return Response(get_daily_index_by_user(user_id=request.user.id))
 
 
 @api_view()
 def DailyReport(request):
-    return Response(get_daily_report(user_id=request.user.id))
+    return Response(get_daily_report_by_user(user_id=request.user.id))

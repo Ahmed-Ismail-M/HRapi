@@ -1,7 +1,7 @@
 from Attendance.models import Attendance
 
 
-def get_daily_report(user_id: int):
+def get_daily_report_by_user(user_id: int):
     daily_atts = (
         Attendance.objects.all()
         .filter(emp=user_id)
@@ -35,4 +35,22 @@ def get_daily_report(user_id: int):
             "check in": first_check_in,
             "check_out": last_check_out,
         }
+    return result
+
+def get_daily_index_by_user(user_id: int):
+    daily_atts = Attendance.objects.all().filter(emp=user_id)
+    result = {}
+    for index, att in enumerate(daily_atts):
+        stri = str(index + 1)
+        str_date = att.date.strftime("%d/%m/%Y")
+        if str_date not in result:
+            if att.check_in:
+                result[str_date] = {f"{stri}-In": att.check_in}
+            if att.check_out:
+                result[str_date] = {f"{stri}-Out": att.check_out}
+        else:
+            if att.check_in:
+                result[str_date][f"{stri}-In"] = att.check_in
+            if att.check_out:
+                result[str_date][f"{stri}-Out"] = att.check_out
     return result
