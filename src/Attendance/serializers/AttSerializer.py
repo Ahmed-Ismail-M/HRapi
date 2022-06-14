@@ -34,11 +34,11 @@ class AttendanceSerializer(serializers.ModelSerializer):
             if last_check_out:
                 if last_check_out >= check_in:
                     raise serializers.ValidationError(
-                        "CHECK IN MUST OCCUR AFTER LAST CHECK OUT")
+                        f"CHECK IN MUST OCCUR AFTER {last_check_out}")
             if last_check_in:
                 if last_check_in >= check_in:
                     raise serializers.ValidationError(
-                        "CHECK IN MUST OCCUR AFTER LAST CHECK IN")
+                        f"CHECK IN MUST OCCUR AFTER {check_in}")
         if check_out:
             # if user logged check out -> 
             if not last_check_in:
@@ -47,11 +47,11 @@ class AttendanceSerializer(serializers.ModelSerializer):
             if last_check_in:
                 if check_out <= last_check_in:
                     raise serializers.ValidationError(
-                        "CHECK OUT MUST OCCUR AFTER LAST CHECK IN")
+                        f"CHECK OUT MUST OCCUR AFTER {last_check_in}")
             if last_check_out:
-                if check_out >= last_check_out:
+                if check_out <= last_check_out:
                     raise serializers.ValidationError(
-                        "CHECK OUT MUST OCCUR AFTER LAST CHECK OUT")
+                        f"CHECK OUT MUST OCCUR AFTER {last_check_out}")
         return attrs
 
     def create(self, validated_data):
