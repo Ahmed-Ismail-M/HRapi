@@ -1,7 +1,7 @@
 ## API Endpoints FOR
-#### Employees
-- Index [auth required, perm required] get'/employees'
-- Sign In  post'/signin'
+#### Employee
+- Register POST username , password '/api/v1/register'
+- Sign In  POST username, password '/api/v1/login'
 
 #### Attendance
 - Create [auth required] post'/att'
