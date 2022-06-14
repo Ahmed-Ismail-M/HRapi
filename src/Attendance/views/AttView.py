@@ -1,7 +1,10 @@
 from rest_framework import generics
 from datetime import datetime
 from Attendance.models import Attendance
-from Attendance.serializers.AttSerializer import AttendanceSerializer, AttendancesSerializer
+from Attendance.serializers.AttSerializer import (
+    AttendanceSerializer,
+    AttendancesSerializer,
+)
 from rest_framework.response import Response
 from rest_framework import status
 from django.utils.decorators import method_decorator
