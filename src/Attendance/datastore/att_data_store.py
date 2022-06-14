@@ -54,3 +54,6 @@ def get_daily_index_by_user(user_id: int):
             if att.check_out:
                 result[str_date][f"{stri}-Out"] = att.check_out
     return result
+
+def get_all_attendances():
+    return Attendance.objects.all()

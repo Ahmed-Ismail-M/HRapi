@@ -7,7 +7,7 @@ from rest_framework import status
 from django.utils.decorators import method_decorator
 from Attendance.middleware import auth_required, allowed_users
 from rest_framework.decorators import api_view
-from Attendance.datastore.att_data_store import get_daily_report_by_user, get_daily_index_by_user
+from Attendance.datastore.att_data_store import get_daily_report_by_user, get_daily_index_by_user, get_all_attendances
 
 def calc_working_hrs(check_in: datetime, check_out: datetime):
     return str(check_in - check_out)
@@ -29,7 +29,7 @@ class Create(generics.GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Index(generics.ListAPIView):
+class IndexByUser(generics.ListAPIView):
     serializer_class = AttendanceSerializer
 
     def get_queryset(self):
@@ -38,10 +38,14 @@ class Index(generics.ListAPIView):
 
 
 @api_view()
-def DailyIndex(request):
+def daily_index(request):
     return Response(get_daily_index_by_user(user_id=request.user.id))
 
 
 @api_view()
-def DailyReport(request):
+def daily_report(request):
     return Response(get_daily_report_by_user(user_id=request.user.id))
+
+@auth_required
+def index(request):
+    return Response(get_all_attendances())
