@@ -46,7 +46,10 @@ def DailyIndex(request):
         str_date = att.date.strftime("%d/%m/%Y")
         if str_date not in result:
             if att.check_in:
-                result[str_date] = {f"In-{stri}": att.check_in}
+                result[str_date] = {
+                    f"In-{stri}": att.check_in,
+                    "Status": "Late" if Attendance.check_late(att.check_in) else "",
+                }
             if att.check_out:
                 result[str_date] = {f"Out-{stri}": att.check_out}
         else:
@@ -54,6 +57,9 @@ def DailyIndex(request):
                 result[str_date][f"In-{stri}"] = att.check_in
             if att.check_out:
                 result[str_date][f"Out-{stri}"] = att.check_out
+                result[str_date][f"Status"] = (
+                    "Early Leave" if Attendance.check_early_leave(att.check_out) else ""
+                )
     return Response(result)
 
 
@@ -80,8 +86,10 @@ def DailyReport(request):
             "Check Out": "Early Leave"
             if Attendance.check_early_leave(last_check_out)
             else "",
-            "Working Time": Attendance.calculate_wroking_time(check_in=last_check_in, check_out= last_check_out),
+            "Working Time": Attendance.calculate_wroking_time(
+                check_in=last_check_in, check_out=last_check_out
+            ),
             "check in": last_check_in,
-            "check_out": last_check_out
+            "check_out": last_check_out,
         }
     return Response(result)
