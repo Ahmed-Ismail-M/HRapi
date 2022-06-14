@@ -3,13 +3,14 @@
 ## Getting Started
 
 This repo contains a back-end app that manages employees attendance.
-To get started run 'pip install -r requirements.txt' at the project root
+To get started run 'pip install -r requirements.txt' at src/
 
 
 
 ## Used Technologies
 - SQLITE for the database
 - Django for the application logic
+- Django RestFrameWrok for rest api
 
 ## Steps to start the app
 
