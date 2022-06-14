@@ -66,7 +66,7 @@ def DailyReport(request):
         .distinct()
     )
     result = {}
-    for index, date in enumerate(daily_atts):
+    for date in daily_atts:
         str_date = date.strftime("%d/%m/%Y")
         # get last check in and out
         last_check_in = (
