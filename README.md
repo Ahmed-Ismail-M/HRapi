@@ -49,6 +49,8 @@ Column | Type
 --- | --- |
 id | SERIAL       PRIMARY KEY
 username | VARCHAR(100) UNIQUE NOT NULL
+password | VARCHAR(100) UNIQUE NOT NULL
+email | VARCHAR(100) UNIQUE NOT NULL
 
 #### Attendance
 Column | Type
