@@ -18,7 +18,8 @@ class Attendance(models.Model):
     check_in = models.TimeField(default=None, null=True)
     check_out = models.TimeField(default=None, null=True)
     date = models.DateField(default=date.today)
-
+    is_attending = models.BooleanField()
+    
     @classmethod
     def check_late(cls, check_in: time) -> bool:
         if check_in > cls.WORKING_HRS["in"]:
