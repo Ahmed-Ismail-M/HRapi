@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from datetime import date, datetime, time
+from datetime import date, time
 
 
 class Employee(AbstractUser):
@@ -11,8 +11,8 @@ class Employee(AbstractUser):
 
 class Attendance(models.Model):
     WORKING_HRS = {
-        "in": time(hour=9, minute=0, second=0, microsecond=0) ,
-        "out":  time(hour=5, minute=0, second=0, microsecond=0) ,
+        "in": time(hour=9, minute=0, second=0, microsecond=0),
+        "out": time(hour=17, minute=0, second=0, microsecond=0),
     }
     emp = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee")
     check_in = models.TimeField(default=None, null=True)
@@ -30,3 +30,7 @@ class Attendance(models.Model):
         if check_out < cls.WORKING_HRS["out"]:
             return True
         return False
+
+    @classmethod
+    def calculate_wroking_time(cls, check_in: time, check_out: time) -> int:
+        return check_in - check_out
