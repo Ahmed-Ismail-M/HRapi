@@ -80,7 +80,7 @@ def DailyReport(request):
             "Check Out": "Early Leave"
             if Attendance.check_early_leave(last_check_out)
             else "",
-            "Working Time": Attendance.calculate_wroking_time(last_check_in, last_check_out),
+            "Working Time": Attendance.calculate_wroking_time(check_in=last_check_in, check_out= last_check_out),
             "check in": last_check_in,
             "check_out": last_check_out
         }

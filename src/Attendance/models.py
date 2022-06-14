@@ -33,7 +33,7 @@ class Attendance(models.Model):
 
     @classmethod
     def calculate_wroking_time(cls, check_in: time, check_out: time) -> dict:
-        td = timedelta(days=0, hours=check_out.hour, minutes=check_out.minute, seconds=check_out.second) - timedelta(days=0,
+        td = timedelta(hours=check_out.hour, minutes=check_out.minute, seconds=check_out.second) - timedelta(
             hours=check_in.hour, minutes=check_in.minute, seconds=check_in.second)
         return {'days': td.days, 'hrs': td.seconds // 3600, 'mins': (td.seconds //60)% 60}
 
