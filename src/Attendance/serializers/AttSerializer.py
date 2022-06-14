@@ -45,9 +45,9 @@ class AttendanceSerializer(serializers.ModelSerializer):
                         "PLEASE CHECK OUT FIRST")
                 else:
                     if last_check_in:
-                        if last_check_in <= check_in:
+                        if last_check_in >= check_in:
                             raise serializers.ValidationError(
-                                    f"CHECK IN MUST OCCUR AFTER {last_record.check_in}")
+                                    f"CHECK IN MUST OCCUR AFTER {last_check_in}")
             if check_out:
                 # if user logged check out -> 
                 if not last_record.is_attending:
