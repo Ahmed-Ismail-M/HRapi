@@ -13,14 +13,18 @@ from Attendance.datastore.att_data_store import (
     get_all_attendances,
 )
 
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
-def calc_working_hrs(check_in: datetime, check_out: datetime):
-    return str(check_in - check_out)
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return
 
 
 class Create(generics.GenericAPIView):
 
     serializer_class = AttendanceSerializer
+    authentication_classes = (CsrfExemptSessionAuthentication, BasicAuthentication)
 
     @method_decorator(auth_required)
     @method_decorator(allowed_users(["Employee"]))

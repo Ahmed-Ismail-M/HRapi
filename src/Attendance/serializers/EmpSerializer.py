@@ -11,7 +11,7 @@ class EmployeeRegisterSerializer(serializers.ModelSerializer):
         model = Employee
         fields = ['username', 'password', 'first_name',
                   'last_name', 'email', 'is_superuser']
-
+    
     def create(self, validated_data):
         emp = self.Meta.model.objects.create(**validated_data)
         emp.set_password(validated_data['password'])
