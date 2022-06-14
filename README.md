@@ -31,7 +31,7 @@ To get started run 'pip install -r requirements.txt' at src/
 - "'python manage.py runserver" will run the server on localhost/8000
 
 
-## API Endpoints FOR
+## API Endpoints
 #### Employee
 - Register POST username , password '/api/v1/register'
 - Sign In  POST username, password '/api/v1/login'
