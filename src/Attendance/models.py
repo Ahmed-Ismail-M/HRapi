@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from datetime import date, time
+from datetime import date, time, timedelta
 
 
 class Employee(AbstractUser):
@@ -32,5 +32,7 @@ class Attendance(models.Model):
         return False
 
     @classmethod
-    def calculate_wroking_time(cls, check_in: time, check_out: time) -> int:
-        return check_in - check_out
+    def calculate_wroking_time(cls, check_in: time, check_out: time) -> timedelta:
+        print(check_in, check_out)
+        
+        return timedelta(hours=check_in.hour, minutes=check_in.minute) - timedelta(hours=check_out.hour, minutes=check_out.minute)
