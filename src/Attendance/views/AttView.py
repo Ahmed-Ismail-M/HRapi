@@ -37,20 +37,27 @@ class Index(generics.ListAPIView):
 def DailyIndex(request):
     daily_atts = Attendance.objects.all().filter(emp=request.user.id)
     result = {}
-    # for index, att in enumerate(daily_atts):
-    #     stri = str(index)
-    #     str_date =att.date.strftime('%d/%m/%Y')
-    #     if str_date not in result:
-    #         result[str_date] = {f'In-{stri}': att.check_in, f'Out-{stri}': att.check_out}
-    #     else:
-    #         result[str_date][f'In-{stri}'], result[str_date][f'Out-{stri}'] = att.check_in, att.check_out
-    memo_intervals = []
     for index, att in enumerate(daily_atts):
+        stri = str(index)
         str_date =att.date.strftime('%d/%m/%Y')
         if str_date not in result:
             if att.check_in:
-                memo_check_in = att.check_in
-            result[str_date] = {'total_hrs': calc_working_hrs(att.check_in, att.check_out)}
+                result[str_date] = {f'In-{stri}': att.check_in}
+            if att.check_out:
+                result[str_date] = {f'Out-{stri}': att.check_out}
         else:
-            result[str_date]['total_hrs']= calc_working_hrs(att.check_in, att.check_out)
+            if att.check_in:
+                result[str_date][f'In-{stri}'] = att.check_in
+            if att.check_out:
+                result[str_date][f'Out-{stri}'] = att.check_out
+                
+    # memo_intervals = []
+    # for index, att in enumerate(daily_atts):
+    #     str_date =att.date.strftime('%d/%m/%Y')
+    #     if str_date not in result:
+    #         if att.check_in:
+    #             memo_check_in = att.check_in
+    #         result[str_date] = {'total_hrs': calc_working_hrs(att.check_in, att.check_out)}
+    #     else:
+    #         result[str_date]['total_hrs']= calc_working_hrs(att.check_in, att.check_out)
     return Response(result)
