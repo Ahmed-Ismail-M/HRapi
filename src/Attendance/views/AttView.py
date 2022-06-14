@@ -47,5 +47,6 @@ def daily_report(request):
     return Response(get_daily_report_by_user(user_id=request.user.id))
 
 @auth_required
+@allowed_users(allowed_roles=["Admin"])
 def index(request):
     return Response(get_all_attendances())
