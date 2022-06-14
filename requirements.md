@@ -6,8 +6,8 @@
 #### Attendance
 - Create [auth required] POST date, check in or out '/api/v1/attendance'
 - Index by User [auth required] GET'/api/v1/attendances'
-- Daily Index [auth required] GET'/api/v1/daily/attendances'
-- Daily Report [auth required] GET'api/v1/report/attendances'
+- Daily Index by User [auth required] GET'/api/v1/daily/attendances'
+- Daily Report by User [auth required] GET'api/v1/report/attendances'
 - All Attendances [auth required, permission required] GET'api/v1/allattendances'
 
 ## Data Shapes

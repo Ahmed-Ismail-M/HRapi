@@ -47,12 +47,12 @@ class IndexByUser(generics.ListAPIView):
 
 
 @api_view()
-def daily_index(request):
+def daily_index_by_user(request):
     return Response(get_daily_index_by_user(user_id=request.user.id))
 
 
 @api_view()
-def daily_report(request):
+def daily_report_by_user(request):
     return Response(get_daily_report_by_user(user_id=request.user.id))
 
 
