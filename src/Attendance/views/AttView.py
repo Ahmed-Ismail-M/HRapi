@@ -75,21 +75,27 @@ def DailyReport(request):
     for date in daily_atts:
         str_date = date.strftime("%d/%m/%Y")
         # get last check in and out
-        last_check_in = (
-            Attendance.objects.all().filter(date=date).latest("check_in").check_in
+        first_check_in = (
+            Attendance.objects.all()
+            .filter(date=date)
+            .order_by("check_in")
+            .exclude(check_in__isnull=True)[0]
+            .check_in
         )
         last_check_out = (
             Attendance.objects.all().filter(date=date).latest("check_out").check_out
         )
         result[str_date] = {
-            "Check In": "Late" if Attendance.check_late(last_check_in) else "",
-            "Check Out": "Early Leave"
+            "Arrival": "Late"
+            if Attendance.check_late(first_check_in)
+            else "Within Time",
+            "Leaving": "Early"
             if Attendance.check_early_leave(last_check_out)
-            else "",
+            else "Within Time",
             "Working Time": Attendance.calculate_wroking_time(
-                check_in=last_check_in, check_out=last_check_out
+                check_in=first_check_in, check_out=last_check_out
             ),
-            "check in": last_check_in,
+            "check in": first_check_in,
             "check_out": last_check_out,
         }
     return Response(result)
