@@ -10,7 +10,8 @@ from rest_framework.decorators import api_view
 
 
 def calc_working_hrs(check_in: datetime, check_out: datetime):
-    return(str(check_in-check_out))
+    return str(check_in - check_out)
+
 
 class Create(generics.GenericAPIView):
 
@@ -20,7 +21,8 @@ class Create(generics.GenericAPIView):
     @method_decorator(allowed_users(["Employee"]))
     def post(self, request):
         serializer = self.serializer_class(
-            data=request.data, context={'request': request})
+            data=request.data, context={"request": request}
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -29,9 +31,11 @@ class Create(generics.GenericAPIView):
 
 class Index(generics.ListAPIView):
     serializer_class = AttendanceSerializer
+
     def get_queryset(self):
         queryset = Attendance.objects.all().filter(emp=self.request.user.id)
         return queryset
+
 
 @api_view()
 def DailyIndex(request):
@@ -39,39 +43,42 @@ def DailyIndex(request):
     result = {}
     for index, att in enumerate(daily_atts):
         stri = str(index)
-        str_date =att.date.strftime('%d/%m/%Y')
+        str_date = att.date.strftime("%d/%m/%Y")
         if str_date not in result:
             if att.check_in:
-                result[str_date] = {f'In-{stri}': att.check_in}
+                result[str_date] = {f"In-{stri}": att.check_in}
             if att.check_out:
-                result[str_date] = {f'Out-{stri}': att.check_out}
+                result[str_date] = {f"Out-{stri}": att.check_out}
         else:
             if att.check_in:
-                result[str_date][f'In-{stri}'] = att.check_in
+                result[str_date][f"In-{stri}"] = att.check_in
             if att.check_out:
-                result[str_date][f'Out-{stri}'] = att.check_out
-                
-    # memo_intervals = []
-    # for index, att in enumerate(daily_atts):
-    #     str_date =att.date.strftime('%d/%m/%Y')
-    #     if str_date not in result:
-    #         if att.check_in:
-    #             memo_check_in = att.check_in
-    #         result[str_date] = {'total_hrs': calc_working_hrs(att.check_in, att.check_out)}
-    #     else:
-    #         result[str_date]['total_hrs']= calc_working_hrs(att.check_in, att.check_out)
+                result[str_date][f"Out-{stri}"] = att.check_out
     return Response(result)
+
 
 @api_view()
 def DailyReport(request):
-    daily_atts = Attendance.objects.all().filter(emp=request.user.id).values_list('date', flat=True).distinct()
+    daily_atts = (
+        Attendance.objects.all()
+        .filter(emp=request.user.id)
+        .values_list("date", flat=True)
+        .distinct()
+    )
     result = {}
     for index, date in enumerate(daily_atts):
-        str_date =date.strftime('%d/%m/%Y')
+        str_date = date.strftime("%d/%m/%Y")
         # get last check in and out
-        last_check_in = Attendance.objects.all().filter(
-            date=date).latest('check_in').check_in
-        last_check_out = Attendance.objects.all().filter(
-            date=date).latest('check_out')
-        result[str_date] = "Late" if Attendance.check_late(last_check_in) else ""
+        last_check_in = (
+            Attendance.objects.all().filter(date=date).latest("check_in").check_in
+        )
+        last_check_out = (
+            Attendance.objects.all().filter(date=date).latest("check_out").check_out
+        )
+        result[str_date] = {
+            "Check In": "Late" if Attendance.check_late(last_check_in) else "",
+            "Check Out": "Early Leave"
+            if Attendance.check_early_leave(last_check_out)
+            else "",
+        }
     return Response(result)
