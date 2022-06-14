@@ -65,12 +65,14 @@ def DailyIndex(request):
 @api_view()
 def DailyReport(request):
     daily_atts = Attendance.objects.all().filter(emp=request.user.id).values_list('date', flat=True).distinct()
-    # result = {}
-    # for index, att in enumerate(daily_atts):
-    #     str_date =att.date.strftime('%d/%m/%Y')
-    #     # get last check in and out
-    #     last_check_in = Attendance.objects.all().filter(
-    #         date=att.date).latest('check_in').check_in
-    #     last_check_out = Attendance.objects.all().filter(
-    #         date=att.date).latest('check_out').check_out
-    return Response(daily_atts)
+    result = {}
+    for index, date in enumerate(daily_atts):
+        str_date =date.strftime('%d/%m/%Y')
+        # get last check in and out
+        last_check_in = Attendance.objects.all().filter(
+            date=date).latest('check_in')
+        last_check_out = Attendance.objects.all().filter(
+            date=date).latest('check_out')
+        if date not in result:
+            result[str_date] = last_check_in.check_late()
+    return Response(result)
