@@ -42,24 +42,18 @@ def DailyIndex(request):
     daily_atts = Attendance.objects.all().filter(emp=request.user.id)
     result = {}
     for index, att in enumerate(daily_atts):
-        stri = str(index)
+        stri = str(index + 1)
         str_date = att.date.strftime("%d/%m/%Y")
         if str_date not in result:
             if att.check_in:
-                result[str_date] = {
-                    f"In-{stri}": att.check_in,
-                    "Status": "Late" if Attendance.check_late(att.check_in) else "",
-                }
+                result[str_date] = {f"{stri}-In": att.check_in}
             if att.check_out:
-                result[str_date] = {f"Out-{stri}": att.check_out}
+                result[str_date] = {f"{stri}-Out": att.check_out}
         else:
             if att.check_in:
-                result[str_date][f"In-{stri}"] = att.check_in
+                result[str_date][f"{stri}-In"] = att.check_in
             if att.check_out:
-                result[str_date][f"Out-{stri}"] = att.check_out
-                result[str_date][f"Status"] = (
-                    "Early Leave" if Attendance.check_early_leave(att.check_out) else ""
-                )
+                result[str_date][f"{stri}-Out"] = att.check_out
     return Response(result)
 
 
