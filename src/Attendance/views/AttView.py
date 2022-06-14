@@ -70,9 +70,8 @@ def DailyReport(request):
         str_date =date.strftime('%d/%m/%Y')
         # get last check in and out
         last_check_in = Attendance.objects.all().filter(
-            date=date).latest('check_in')
+            date=date).latest('check_in').check_in
         last_check_out = Attendance.objects.all().filter(
             date=date).latest('check_out')
-        if date not in result:
-            result[str_date] = last_check_in.check_late()
+        result[str_date] = "Late" if Attendance.check_late(last_check_in) else ""
     return Response(result)
