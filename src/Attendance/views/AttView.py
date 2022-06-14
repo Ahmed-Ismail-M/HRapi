@@ -1,7 +1,7 @@
 from rest_framework import generics
 from datetime import datetime
 from Attendance.models import Attendance
-from Attendance.serializers.AttSerializer import AttendanceSerializer
+from Attendance.serializers.AttSerializer import AttendanceSerializer, AttendancesSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.utils.decorators import method_decorator
@@ -57,7 +57,7 @@ def daily_report_by_user(request):
 
 
 class Index(generics.ListAPIView):
-    serializer_class = AttendanceSerializer
+    serializer_class = AttendancesSerializer
 
     def get_queryset(self):
         queryset = Attendance.objects.all()

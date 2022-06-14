@@ -85,3 +85,7 @@ class AttendanceSerializer(serializers.ModelSerializer):
                 "Registered employee only"
             ) from emp_not_exited
         return att
+class AttendancesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Attendance
+        fields = '__all__'
