@@ -1,5 +1,6 @@
 from Attendance.models import Attendance, Employee
 from rest_framework import serializers
+from Attendance.serializers.EmpSerializer import EmployeeSerializer
 
 
 class AttendanceSerializer(serializers.ModelSerializer):
@@ -85,7 +86,11 @@ class AttendanceSerializer(serializers.ModelSerializer):
                 "Registered employee only"
             ) from emp_not_exited
         return att
+
+
 class AttendancesSerializer(serializers.ModelSerializer):
+    emp = EmployeeSerializer()
+
     class Meta:
         model = Attendance
-        fields = '__all__'
+        fields = ["emp", "date", "check_in", "check_out"]

@@ -10,7 +10,7 @@ class EmployeeRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = ['username', 'password', 'first_name',
-                  'last_name', 'email', 'is_superuser']
+                  'last_name', 'email']
     
     def create(self, validated_data):
         emp = self.Meta.model.objects.create(**validated_data)
@@ -50,3 +50,7 @@ class EmployeeLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError(msg, code='authorization')
         attrs['user'] = user
         return attrs
+class EmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = [ 'id', 'username']
